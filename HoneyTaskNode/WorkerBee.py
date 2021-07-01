@@ -31,31 +31,24 @@ def listener(s):
     while True:
         if len(tasks)>0:   
             data = tasks.pop()
-
-            if data.decode() == "Status":
-                print("status asked")
-                s.send(b"Running")
-            elif data.decode() == "Task":
-                print("Task Assigned")
-                start = time.time()
-                dotask()
-                end = time.time()
-                result = f"TaskDone:{end-start}"
-                print(result)
-                s.send(result.encode())
-            elif data != None:
-                pass
-            else:
-                s.send(b"random")
+            st = time.time()
+            data.start()
+            data.join()
+            en = time.time()
+            res = f"taskDone:{en-st}"
+            s.send(res.encode())
 
 threading.Thread(target = listener,daemon=True,args=(s,)).start()
 while True:
         data = s.recv(1024)
-        tasks.insert(0,data)
-        
+        if data.decode()=="Power":
+            pow = f"Power:{powerCalc()}"
+            print(pow)
+            s.send(pow.encode())
+        elif data.decode() == "Status":
+            s.send(b"Running")
+        elif data.decode() == "Task":
+            print("task!!!")
+            t = threading.Thread(target = dotask,daemon = True)
+            tasks.append(t)
 
-        # s.send(b"Just Checking")
-        # time.sleep(5)
-        # s.send(b"Just Checking")
-        # time.sleep(5)
-        # s.send(b"Just Checking")
