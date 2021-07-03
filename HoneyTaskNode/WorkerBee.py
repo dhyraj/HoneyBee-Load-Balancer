@@ -4,7 +4,7 @@ import time
 import random
 import psutil as pt
 def dotask():
-    print("here")
+    print("doing task")
     counter = 1001
     fib = [0]*counter
     fib[1] = 1
@@ -24,7 +24,7 @@ s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.connect(("localhost",9952))
 pow = f"{powerCalc()}"
 s.send(pow.encode()) #power of cpu
-print(s)
+print(s,pow)
 
 tasks = []
 def listener(s):
@@ -36,19 +36,24 @@ def listener(s):
             data.join()
             en = time.time()
             res = f"taskDone:{en-st}"
+            print(res)
             s.send(res.encode())
+            print("completed")
 
 threading.Thread(target = listener,daemon=True,args=(s,)).start()
 while True:
-        data = s.recv(1024)
-        if data.decode()=="Power":
+        data = s.recv(1024).decode()
+        if data =="Power":
             pow = f"Power:{powerCalc()}"
             print(pow)
             s.send(pow.encode())
-        elif data.decode() == "Status":
+            print("power sent")
+        elif data == "Status":
             s.send(b"Running")
-        elif data.decode() == "Task":
+        elif data == "Task":
             print("task!!!")
+            pow = f"Power:{powerCalc()}"
+            print(pow)
+            s.send(pow.encode())
             t = threading.Thread(target = dotask,daemon = True)
             tasks.append(t)
-
