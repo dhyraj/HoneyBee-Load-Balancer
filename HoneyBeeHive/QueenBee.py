@@ -52,7 +52,7 @@ def dotask():
     #     for j in range(counter):
     for k in range(counter):
         fib[k] = (fib[k-1]+fib[k-2])
-    slp = random.randint(1,4)
+    slp = 2 #random.randint(1,4)
     # print("Sleeping for",slp)
     time.sleep(slp)
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
                         w.node.send(b"Task")
                         w.unLocked = 0
                         # w.node.send(b"Power")
-                        w.power = float(w.node.recv(1024).decode().split(":")[1])*random.randint(1,3)
+                        w.power = float(w.node.recv(1024).decode().split(":")[1]) #*random.randint(1,3)
                         t1 = threading.Thread(target = w.reciever,daemon=True)
                         t1.start()
                         # t2 = threading.Thread(target = w.reciever,daemon = True)
