@@ -12,7 +12,7 @@ def dotask():
     #     for j in range(counter):
     for k in range(counter):
         fib[k] = (fib[k-1]+fib[k-2])
-    slp = random.randint(1,4)
+    slp = 2 #random.randint(1,4)
     print("Sleeping for",slp)
     time.sleep(slp)
 
@@ -52,8 +52,7 @@ while True:
             s.send(b"Running")
         elif data == "Task":
             print("task!!!")
-            pow = f"Power:{powerCalc()}"
-            print(pow)
-            s.send(pow.encode())
             t = threading.Thread(target = dotask,daemon = True)
             tasks.append(t)
+            pow = f"Power:{powerCalc()}"
+            s.send(pow.encode())
